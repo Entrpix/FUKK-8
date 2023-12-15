@@ -40,6 +40,9 @@ document.addEventListener('DOMContentLoaded', function () {
             case 'history':
                 showHistory();
                 break;
+            case 'whoami':
+                whoami();
+                break;
             default:
                 unknown();
         };
@@ -63,7 +66,7 @@ document.addEventListener('DOMContentLoaded', function () {
     };
 
     function help() {
-        addLine("clear - Clears the console\necho <text> - Displays <text> to the console\ntime - Displays current time (12 & 24 hour clock)\ndate - Displays the current date\nhelp - You just ran it :3");
+        addLine("clear - Clears the console\necho <text> - Displays <text> to the console\ntime - Displays current time (12 & 24 hour clock)\ndate - Displays the current date\nrandom <min> <max> - generates a random number between <min> and <max>\nhistory - displays previous commands run\nwhoami - displays user info\nhelp - You just ran it :3");
     };
 
     function time() {
@@ -130,6 +133,18 @@ document.addEventListener('DOMContentLoaded', function () {
     function getHistoryLines(maxHistoryLines = 10) {
         const startIndex = Math.max(0, commandHistory.length - maxHistoryLines);
         return commandHistory.slice(startIndex);
-    }
+    };
+
+    function whoami() {
+        const userAgent = navigator.userAgent;
+        const platform = navigator.platform;
+        const appName = navigator.appName;
+        const appVersion = navigator.appVersion;
     
+        const userInfo = `
+        \nUser Agent: ${userAgent}\nPlatform: ${platform}\nApp Name: ${appName}\nApp Version: ${appVersion}
+        `;
+    
+        addLine(`Who Am I?\n${userInfo}`);
+    };
 });
