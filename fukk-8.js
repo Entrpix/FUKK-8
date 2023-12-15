@@ -1,3 +1,5 @@
+const commandHistory = [];
+
 document.addEventListener('DOMContentLoaded', function () {
     const fukkContainer = document.getElementById('fukk-container');
     const userInput = document.getElementById('user-input');
@@ -11,6 +13,7 @@ document.addEventListener('DOMContentLoaded', function () {
 
     function handleCommand(command) {
         addLine('$ ' + command);
+        commandHistory.push(command);
 
         const commandParts = command.split(' ');
         const commandName = commandParts[0].toLowerCase();
@@ -33,6 +36,9 @@ document.addEventListener('DOMContentLoaded', function () {
                 break;
             case 'random':
                 random(commandParts.slice(1));
+                break;
+            case 'history':
+                showHistory();
                 break;
             default:
                 unknown();
@@ -108,5 +114,22 @@ document.addEventListener('DOMContentLoaded', function () {
             addLine('Invalid parameters. Usage: random <min> <max>');
         };
     };
+
+    function showHistory() {
+        const historyLines = getHistoryLines();
+        if (historyLines.length > 0) {
+            addLine('Command History:');
+            historyLines.forEach((line, index) => {
+                addLine(`${index + 1}. ${line}`);
+            });
+        } else {
+            addLine('No command history available.');
+        };
+    };
+
+    function getHistoryLines(maxHistoryLines = 10) {
+        const startIndex = Math.max(0, commandHistory.length - maxHistoryLines);
+        return commandHistory.slice(startIndex);
+    }
     
 });
