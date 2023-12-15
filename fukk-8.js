@@ -7,7 +7,7 @@ document.addEventListener('DOMContentLoaded', function () {
         line.textContent = text;
         fukkContainer.appendChild(line);
         fukkContainer.scrollTop = fukkContainer.scrollHeight;
-    }
+    };
 
     function handleCommand(command) {
         addLine('$ ' + command);
@@ -25,33 +25,66 @@ document.addEventListener('DOMContentLoaded', function () {
             case 'help':
                 help();
                 break;
+            case 'time':
+                time();
+                break;
+            case 'date':
+                date();
+                break;
             default:
                 unknown();
-        }
+        };
 
         userInput.value = '';
-    }
+    };
 
     function clear() {
         fukkContainer.innerHTML = '';
-    }
+    };
 
     function echo(str) {
         addLine(`> ${str}`);
-    }
+    };
 
     function unknown() {
         addLine('Command not recognized.');
-    }
+    };
 
     function help() {
-        addLine("clear - clears the console\necho <text> - displays <text> to the console\nhelp - you just ran it :3");
-    }
+        addLine("clear - Clears the console\necho <text> - Displays <text> to the console\ntime - Displays current time (12 & 24 hour clock)\ndate - Displays the current date\nhelp - You just ran it :3");
+    };
+
+    function time() {
+        const currentTime24 = new Date();
+        const hours24 = currentTime24.getHours();
+        const minutes24 = currentTime24.getMinutes();
+        const seconds24 = currentTime24.getSeconds();
+        const time24 = `${hours24}:${minutes24}:${seconds24}`;
+
+        const currentTime = new Date();
+        let hours = currentTime.getHours();
+        const minutes = currentTime.getMinutes();
+        const seconds = currentTime.getSeconds();
+    
+        const amPM = hours >= 12 ? 'PM' : 'AM';
+        hours = hours % 12 || 12;
+    
+        const time = `${hours}:${minutes}:${seconds} ${amPM}`;
+        addLine(`Current Time: ${time} | ${time24}`);
+    };
 
     userInput.addEventListener('keydown', function (event) {
         if (event.key === 'Enter') {
             const command = userInput.value.trim();
             handleCommand(command);
-        }
+        };
     });
+
+    function date() {
+        const currentDate = new Date();
+        const options = { weekday: 'long', year: 'numeric', month: 'long', day: 'numeric' };
+        const date = currentDate.toLocaleDateString('en-US', options);
+        addLine(`Current Date: ${date}`);
+    }
+    
 });
