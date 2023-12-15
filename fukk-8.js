@@ -76,7 +76,7 @@ document.addEventListener('DOMContentLoaded', function () {
     };
 
     function help() {
-        addLine("clear - Clears the console\necho <text> - Displays <text> to the console\ntime - Displays current time (12 & 24 hour clock)\ndate - Displays the current date\nrandom <min> <max> - Generates a random number between <min> and <max>\nhistory - Displays previous commands run\nwhoami - Displays user info\ncalc <num> <operator> <num2> - Will add, subtract, multiply, or divide by <num> and <num2>\nencode64 <text> - Encodes <text> w/ Base64\ndecode64 <text> - Decodes base64 <text>\nhelp - You just ran it :3");
+        addLine("clear - Clears the console\necho <text> - Displays <text> to the console\ntime - Displays current time (12 & 24 hour clock)\ndate - Displays the current date\nrandom <min> <max> - Generates a random number between <min> and <max>\nhistory - Displays previous commands run\nwhoami - Displays user info\ncalc <num> <operator> <num2> - Will add, subtract, multiply, or divide by <num> and <num2>\nencode64 <text> - Encodes <text> w/ Base64\ndecode64 <text> - Decodes Base64 <text>\nhelp - You just ran it :3");
     };
 
     function time() {
