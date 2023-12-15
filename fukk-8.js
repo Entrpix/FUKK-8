@@ -43,6 +43,16 @@ document.addEventListener('DOMContentLoaded', function () {
             case 'whoami':
                 whoami();
                 break;
+            case 'calc':
+                calc(commandParts.slice(1));
+                break;
+            case 'encode64':
+                encode64(commandParts.slice(1).join(' '));
+                break;
+                
+            case 'decode64':
+                decode64(commandParts.slice(1).join(' '));
+                break;
             default:
                 unknown();
         };
@@ -66,7 +76,7 @@ document.addEventListener('DOMContentLoaded', function () {
     };
 
     function help() {
-        addLine("clear - Clears the console\necho <text> - Displays <text> to the console\ntime - Displays current time (12 & 24 hour clock)\ndate - Displays the current date\nrandom <min> <max> - Generates a random number between <min> and <max>\nhistory - Displays previous commands run\nwhoami - Displays user info\nhelp - You just ran it :3");
+        addLine("clear - Clears the console\necho <text> - Displays <text> to the console\ntime - Displays current time (12 & 24 hour clock)\ndate - Displays the current date\nrandom <min> <max> - Generates a random number between <min> and <max>\nhistory - Displays previous commands run\nwhoami - Displays user info\ncalc <num> <operator> <num2> - Will add, subtract, multiply, or divide by <num> and <num2>\nencode64 <text> - Encodes <text> w/ Base64\ndecode64 <text> - Decodes base64 <text>\nhelp - You just ran it :3");
     };
 
     function time() {
@@ -146,5 +156,68 @@ document.addEventListener('DOMContentLoaded', function () {
         `;
     
         addLine(`Who Am I?\n${userInfo}`);
+    };
+
+    function calc(params) {
+        if (params.length === 3) {
+            const num1 = parseFloat(params[0]);
+            const operator = params[1];
+            const num2 = parseFloat(params[2]);
+    
+            if (!isNaN(num1) && !isNaN(num2) && isValidOperator(operator)) {
+                let result;
+    
+                switch (operator) {
+                    case '+':
+                        result = num1 + num2;
+                        break;
+                    case '-':
+                        result = num1 - num2;
+                        break;
+                    case '*':
+                        result = num1 * num2;
+                        break;
+                    case '/':
+                        result = num1 / num2;
+                        break;
+                    default:
+                        addLine('Invalid operator. Supported operators: +, -, *, /');
+                        return;
+                };
+    
+                addLine(`Result: ${result}`);
+            } else {
+                addLine('Invalid parameters. Usage: calc <num1> <operator> <num2>');
+            };
+        } else {
+            addLine('Invalid parameters. Usage: calc <num1> <operator> <num2>');
+        };
+    };
+    
+    function isValidOperator(operator) {
+        const validOperators = ['+', '-', '*', '/'];
+        return validOperators.includes(operator);
+    };
+
+    function encode64(text) {
+        if (text.trim() === '') {
+            addLine('Invalid parameters. Usage: encode64 <text>');
+        } else {
+            const encodedText = btoa(text);
+            addLine(`Base64 Encoded: ${encodedText}`);
+        };
+    };
+    
+    function decode64(encodedText) {
+        if (encodedText.trim() === '') {
+            addLine('Invalid parameters. Usage: decode64 <encodedText>');
+        } else {
+            try {
+                const decodedText = atob(encodedText);
+                addLine(`Base64 Decoded: ${decodedText}`);
+            } catch (error) {
+                addLine('Error decoding Base64. Make sure the input is valid Base64-encoded text.');
+            };
+        };
     };
 });
