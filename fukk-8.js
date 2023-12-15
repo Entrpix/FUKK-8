@@ -31,6 +31,9 @@ document.addEventListener('DOMContentLoaded', function () {
             case 'date':
                 date();
                 break;
+            case 'random':
+                random(commandParts.slice(1));
+                break;
             default:
                 unknown();
         };
@@ -43,9 +46,12 @@ document.addEventListener('DOMContentLoaded', function () {
     };
 
     function echo(str) {
-        addLine(`> ${str}`);
-    };
-
+        if (str.trim() === '') {
+            addLine('Invalid parameters. Usage: echo <text>');
+        } else {
+            addLine(`> ${str}`);
+        }
+    }
     function unknown() {
         addLine('Command not recognized.');
     };
@@ -85,6 +91,22 @@ document.addEventListener('DOMContentLoaded', function () {
         const options = { weekday: 'long', year: 'numeric', month: 'long', day: 'numeric' };
         const date = currentDate.toLocaleDateString('en-US', options);
         addLine(`Current Date: ${date}`);
-    }
+    };
+
+    function random(params) {
+        if (params.length === 2) {
+            const min = parseInt(params[0]);
+            const max = parseInt(params[1]);
+    
+            if (!isNaN(min) && !isNaN(max)) {
+                const randomNumber = Math.floor(Math.random() * (max - min + 1)) + min;
+                addLine(`Random Number: ${randomNumber}`);
+            } else {
+                addLine('Invalid parameters. Usage: random <min> <max>');
+            };
+        } else {
+            addLine('Invalid parameters. Usage: random <min> <max>');
+        };
+    };
     
 });
