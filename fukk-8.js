@@ -66,7 +66,7 @@ document.addEventListener('DOMContentLoaded', function () {
     };
 
     function help() {
-        addLine("clear - Clears the console\necho <text> - Displays <text> to the console\ntime - Displays current time (12 & 24 hour clock)\ndate - Displays the current date\nrandom <min> <max> - generates a random number between <min> and <max>\nhistory - displays previous commands run\nwhoami - displays user info\nhelp - You just ran it :3");
+        addLine("clear - Clears the console\necho <text> - Displays <text> to the console\ntime - Displays current time (12 & 24 hour clock)\ndate - Displays the current date\nrandom <min> <max> - Generates a random number between <min> and <max>\nhistory - Displays previous commands run\nwhoami - Displays user info\nhelp - You just ran it :3");
     };
 
     function time() {
