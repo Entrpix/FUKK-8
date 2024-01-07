@@ -1,23 +1,26 @@
 body {
-    background-color: rgb(14, 14, 14);
+    background-color: rgb(0, 0, 0);
     font-family: Arial, Helvetica, sans-serif;
+}
+
+.user-input {
+    margin-top: 10px;
+    padding: 5px;
+    color: rgb(0, 255, 0);
+    background: transparent;
+    border: transparent;
+}
+
+::placeholder {
+    color: rgb(0, 255, 0);
 }
 
 #fukk-container {
     font-family: monospace;
     white-space: pre;
     overflow: auto;
-    height: 300px;
-    border: 1px solid #ccc;
-    padding: 10px;
-    background-color: #292929;
-    color: #ffffff;
-}
-
-.user-input {
-    margin-top: 10px;
+    height: 1500px;
     padding: 5px;
-    background-color: #292929;
-    color: #ffffff;
-    border: 1px solid #ccc;
+    background-color: rgb(0, 0, 0);
+    color: rgb(255, 255, 255);
 }

@@ -1,6 +1,8 @@
+document.title = localStorage.getItem('title');
+
 const commandHistory = [];
 
-document.addEventListener('DOMContentLoaded', function () {
+document.addEventListener('DOMContentLoaded', function() {
     const fukkContainer = document.getElementById('fukk-container');
     const userInput = document.getElementById('user-input');
 
@@ -20,13 +22,10 @@ document.addEventListener('DOMContentLoaded', function () {
 
         switch (commandName) {
             case 'clear':
-                clear();
+                fukkContainer.innerHTML = '';
                 break;
             case 'echo':
                 echo(commandParts.slice(1).join(' '));
-                break;
-            case 'help':
-                help();
                 break;
             case 'time':
                 time();
@@ -43,15 +42,29 @@ document.addEventListener('DOMContentLoaded', function () {
             case 'whoami':
                 whoami();
                 break;
-            case 'calc':
-                calc(commandParts.slice(1));
-                break;
             case 'encode64':
                 encode64(commandParts.slice(1).join(' '));
                 break;
-                
             case 'decode64':
                 decode64(commandParts.slice(1).join(' '));
+                break;
+            case 'cloak':
+                cloak(commandParts.slice(1).join(' '));
+                break;
+            case 'reset':
+                reset();
+                break;
+            case 'transrights':
+                addLine("#TransRights 🏳️‍⚧️💜");
+                break;
+            case 'exec':
+                exec(commandParts.slice(1).join(' '));
+                break;
+            case 'version':
+                version();
+                break;
+            case 'help':
+                help();
                 break;
             default:
                 unknown();
@@ -60,8 +73,34 @@ document.addEventListener('DOMContentLoaded', function () {
         userInput.value = '';
     };
 
-    function clear() {
-        fukkContainer.innerHTML = '';
+    userInput.addEventListener('keydown', function(event) {
+        if (event.key === 'Enter') {
+            const command = userInput.value.trim();
+            handleCommand(command);
+        };
+    });
+
+    function unknown() {
+        addLine('Command not recognized.');
+    };
+
+    function showHistory() {
+        const historyLines = getHistoryLines();
+
+        if (historyLines.length > 0) {
+            addLine('Current Command History:');
+            historyLines.forEach((line, index) => {
+                addLine(`${index + 1}. ${line}`);
+            });
+            addLine(' ')
+        } else {
+            addLine('No command history available.');
+        };
+    };
+
+    function getHistoryLines(maxHistoryLines = 10) {
+        const startIndex = Math.max(0, commandHistory.length - maxHistoryLines);
+        return commandHistory.slice(startIndex);
     };
 
     function echo(str) {
@@ -71,13 +110,6 @@ document.addEventListener('DOMContentLoaded', function () {
             addLine(`> ${str}`);
         }
     }
-    function unknown() {
-        addLine('Command not recognized.');
-    };
-
-    function help() {
-        addLine("clear - Clears the console\necho <text> - Displays <text> to the console\ntime - Displays current time (12 & 24 hour clock)\ndate - Displays the current date\nrandom <min> <max> - Generates a random number between <min> and <max>\nhistory - Displays previous commands run\nwhoami - Displays user info\ncalc <num> <operator> <num2> - Will add, subtract, multiply, or divide by <num> and <num2>\nencode64 <text> - Encodes <text> w/ Base64\ndecode64 <text> - Decodes Base64 <text>\nhelp - You just ran it :3");
-    };
 
     function time() {
         const currentTime24 = new Date();
@@ -90,20 +122,13 @@ document.addEventListener('DOMContentLoaded', function () {
         let hours = currentTime.getHours();
         const minutes = currentTime.getMinutes();
         const seconds = currentTime.getSeconds();
-    
+
         const amPM = hours >= 12 ? 'PM' : 'AM';
         hours = hours % 12 || 12;
-    
+
         const time = `${hours}:${minutes}:${seconds} ${amPM}`;
         addLine(`Current Time: ${time} | ${time24}`);
     };
-
-    userInput.addEventListener('keydown', function (event) {
-        if (event.key === 'Enter') {
-            const command = userInput.value.trim();
-            handleCommand(command);
-        };
-    });
 
     function date() {
         const currentDate = new Date();
@@ -116,7 +141,7 @@ document.addEventListener('DOMContentLoaded', function () {
         if (params.length === 2) {
             const min = parseInt(params[0]);
             const max = parseInt(params[1]);
-    
+
             if (!isNaN(min) && !isNaN(max)) {
                 const randomNumber = Math.floor(Math.random() * (max - min + 1)) + min;
                 addLine(`Random Number: ${randomNumber}`);
@@ -128,75 +153,12 @@ document.addEventListener('DOMContentLoaded', function () {
         };
     };
 
-    function showHistory() {
-        const historyLines = getHistoryLines();
-        if (historyLines.length > 0) {
-            addLine('Command History:');
-            historyLines.forEach((line, index) => {
-                addLine(`${index + 1}. ${line}`);
-            });
-        } else {
-            addLine('No command history available.');
-        };
-    };
-
-    function getHistoryLines(maxHistoryLines = 10) {
-        const startIndex = Math.max(0, commandHistory.length - maxHistoryLines);
-        return commandHistory.slice(startIndex);
-    };
-
     function whoami() {
-        const userAgent = navigator.userAgent;
-        const platform = navigator.platform;
-        const appName = navigator.appName;
-        const appVersion = navigator.appVersion;
-    
-        const userInfo = `
-        \nUser Agent: ${userAgent}\nPlatform: ${platform}\nApp Name: ${appName}\nApp Version: ${appVersion}
-        `;
-    
-        addLine(`Who Am I?\n${userInfo}`);
-    };
+        addLine('Who Am I?');
+        addLine(`User Agent: ${navigator.userAgent}`);
+        addLine(`Operating System: ${navigator.platform}`);
+        addLine(`Language: ${navigator.language}`);
 
-    function calc(params) {
-        if (params.length === 3) {
-            const num1 = parseFloat(params[0]);
-            const operator = params[1];
-            const num2 = parseFloat(params[2]);
-    
-            if (!isNaN(num1) && !isNaN(num2) && isValidOperator(operator)) {
-                let result;
-    
-                switch (operator) {
-                    case '+':
-                        result = num1 + num2;
-                        break;
-                    case '-':
-                        result = num1 - num2;
-                        break;
-                    case '*':
-                        result = num1 * num2;
-                        break;
-                    case '/':
-                        result = num1 / num2;
-                        break;
-                    default:
-                        addLine('Invalid operator. Supported operators: +, -, *, /');
-                        return;
-                };
-    
-                addLine(`Result: ${result}`);
-            } else {
-                addLine('Invalid parameters. Usage: calc <num1> <operator> <num2>');
-            };
-        } else {
-            addLine('Invalid parameters. Usage: calc <num1> <operator> <num2>');
-        };
-    };
-    
-    function isValidOperator(operator) {
-        const validOperators = ['+', '-', '*', '/'];
-        return validOperators.includes(operator);
     };
 
     function encode64(text) {
@@ -207,7 +169,7 @@ document.addEventListener('DOMContentLoaded', function () {
             addLine(`Base64 Encoded: ${encodedText}`);
         };
     };
-    
+
     function decode64(encodedText) {
         if (encodedText.trim() === '') {
             addLine('Invalid parameters. Usage: decode64 <encodedText>');
@@ -220,4 +182,46 @@ document.addEventListener('DOMContentLoaded', function () {
             };
         };
     };
+
+    function cloak(title) {
+        localStorage.setItem('title', title);
+        document.title = localStorage.getItem('title');
+        addLine(`Title Set to ${title}`);
+    };
+
+    function reset() {
+        localStorage.setItem("title", "FUKK-8");
+        document.title = localStorage.getItem("title");
+        addLine('Reset LocalStorage Values');
+    };
+
+    function exec(code) {
+        eval(code);
+    };
+
+    function version() {
+        addLine('FUKK-8');
+        addLine('Version: v0.1.0 (Beta Release)');
+        addLine('License: MIT');
+        addLine('Source Code: https://github.com/entrpix/FUKK-8');
+    };
+
+    function help() {
+        addLine('clear - Clears the console');
+        addLine('echo <text> - Writes <text> to the console');
+        addLine('time - Writes the current time to the console');
+        addLine('date - Writes the current date to the console');
+        addLine('random <min> <max> - Writes a random number to the console between <mix> and <max>');
+        addLine('history - Writes previously run commands to the console (refreshing pages clears it)')
+        addLine('whoami - Writes information about the user to the console');
+        addLine('encode64 <text> - Encodes <text> in Base64 and writes it to the console');
+        addLine('decode64 <text> - Decodes <text> in Base64 and writes it to the console');
+        addLine('cloak <text> - Sets the pages title to <text> (works across refreshses)');
+        addLine('reset - Resets the cloaked title (resets LocalStorage values)');
+        addLine('exec <code> - Runs <code> (Uses eval)');
+        addLine('version - Writes the version of FUKK-8 to the console');
+        addLine('transrights - #TransRights <3333');
+        addLine('help - Ya just ran it :3');
+    };
+
 });
